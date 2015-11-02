@@ -49,6 +49,10 @@
     public function boot() {
       $app = $this->app;
 
+      $this->publishes([
+        __DIR__ . '/../../config/config.php' => config_path('codebasehq.php'),
+      ]);
+
       // Listen for exception events and pass them to Codebase HQ.
       if ($app->make('config')->get('codebasehq::exception_logging')) {
         $app->error(function(\Exception $exception) use ($app) {
