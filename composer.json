@@ -1,5 +1,5 @@
 {
-    "name": "bkwld/codebasehq",
+    "name": "sparkhire/codebasehq",
     "description": "Tools for integrating Laravel apps with CodebaseHQ features",
     "authors": [{ "name": "Robert Reinhard", "email": "info@bkwld.com" }],
     "license": "MIT",
