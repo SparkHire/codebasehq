@@ -4,6 +4,11 @@
 
   use Airbrake;
 
+  /**
+   * CodebaseHQ Service Provider
+   *
+   * @package SparkHire\CodebaseHQ
+   */
   class ServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 
