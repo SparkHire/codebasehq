@@ -1,4 +1,4 @@
-<?php namespace Bkwld\CodebaseHQ\Commands;
+<?php namespace SparkHire\CodebaseHQ\Commands;
 
 // Dependencies
 use DateTime;
@@ -6,10 +6,10 @@ use DateTimeZone;
 use Illuminate\Console\Command;
 use SimpleXMLElement;
 use Symfony\Component\Console\Input\InputOption;
-use Bkwld\CodebaseHQ\Exception;
+use SparkHire\CodebaseHQ\Exception;
 
 class DeployTickets extends Command {
-	
+
 	/**
 	 * The console command name.
 	 *
@@ -36,7 +36,7 @@ class DeployTickets extends Command {
 
 	/**
 	 * Inject dependencies
-	 * @param Bkwld\CodebaseHQ\Request $request
+	 * @param SparkHire\CodebaseHQ\Request $request
 	 */
 	public function __construct($request) {
 		$this->request = $request;
@@ -49,29 +49,29 @@ class DeployTickets extends Command {
 	 * @return void
 	 */
 	public function fire() {
-		
+
 		// Localize options
 		$environment = $this->option('server');
 		$remote = $this->option('remote');
-		
+
 		// Get info of person running the deploy
 		$name = trim(`git config --get user.name`);
 		$email = trim(`git config --get user.email`);
-		
+
 		// Get the name of the repo
 		preg_match('#/([\w-]+)\.git$#', trim(shell_exec("git config --get remote.{$remote}.url")), $matches);
 		$repo = $matches[1];
-		
+
 		// Loop through STDIN and find ticket references
 		$commit= null;
 		$deployed = array();
 		while ($line = fgets(STDIN)) {
-			
+
 			// Check for a commit hash
 			if (preg_match('#^commit (\w+)$#', $line, $match)) {
 				$commit = $match[1];
 			}
-			
+
 			// Check for a ticket and add to the deployed array
 			if (preg_match_all('#\[ *[\w-]+ *: *(\d+) *\]#', $line, $matches)) {
 				foreach($matches[1] as $ticket) {
@@ -81,20 +81,20 @@ class DeployTickets extends Command {
 				}
 			}
 		}
-		
+
 		// Prepare message
 		$date = new DateTime();
 		$date->setTimezone(new DateTimeZone('America/Los_Angeles'));
 		$date = $date->format('l, F jS \a\t g:i A T');
 		$environment = $environment ? ", to **{$environment}**," : null;
-		
+
 		// Loop through those and creat ticket comments in codebase
 		foreach($deployed as $ticket => $commits) {
 
 			// Singular commits
 			if (count($commits) === 1) {
 				$message = "Note: [{$name}](mailto:{$email}) deployed{$environment} a commit that references this ticket on {$date}.\n\nThe commit was: {commit:{$repo}/{$commits[0]}}";
-			
+
 			// Plural commits
 			} else {
 				$message = "Note: [{$name}](mailto:{$email}) deployed{$environment} commits that reference this ticket on {$date}.\n\nThe commits were:\n\n";
@@ -108,10 +108,10 @@ class DeployTickets extends Command {
 			// Submit it.  Will throw exception on failure
 			$this->request->call('POST', 'tickets/'.$ticket.'/notes', $xml->asXML());
 		}
-		
+
 		// Ouptut status
 		$this->info(count($deployed).' ticket(s) found and updated');
-		
+
 	}
-	
+
 }

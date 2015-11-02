@@ -1,10 +1,10 @@
-<?php namespace Bkwld\CodebaseHQ;
+<?php namespace SparkHire\CodebaseHQ;
 
 /**
  * Resuable code for submitting to the CodebaseHQ API
  */
 class Request {
-	
+
 	/**
 	 * Inject dependencies
 	 * @param string $user API Username
@@ -16,24 +16,24 @@ class Request {
 		$this->key = $key;
 		$this->project = $project;
 	}
-	
+
 	/**
 	 * Make a request on the CodebaseHQ API
 	 */
 	public function call($method, $path, $xml) {
-		
-		// Default headers	
+
+		// Default headers
 		$headers = array('Accept: application/xml', 'Content-type: application/xml');
-		
+
 		// Create basic-auth syntax
 		$auth = $this->user.':'.$this->key;
-		
+
 		// Endpoint
 		$path = trim($path, '/');
 		$url = 'http://api3.codebasehq.com/'.$this->project.'/'.$path;
-		
+
 		// Make request
-		$ch = curl_init(); 
+		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_USERPWD, $auth);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -43,12 +43,12 @@ class Request {
 		$result = curl_exec($ch);
 		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
-		
+
 		// If not a 20# status, it's a failure
 		if (!preg_match('#^20\d$#', $status)) {
 			throw new Exception("CodebaseHQ request failure ({$status}): {$result}");
 		}
-		
+
 	}
-	
+
 }

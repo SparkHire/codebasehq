@@ -1,3 +1,3 @@
-<?php namespace Bkwld\CodebaseHQ;
+<?php namespace SparkHire\CodebaseHQ;
 
 class Exception extends \Exception { }

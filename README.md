@@ -8,9 +8,9 @@ This is a [Laravel Package](http://laravel.com/) that makes it easy to integrate
 
 ## Installation
 
-1. Add it to your composer.json (`"bkwld/codebasehq": "~3.0"`) and do a composer install.
-2. Add the service provider to your app.php config file providers: `'Bkwld\CodebaseHQ\ServiceProvider',`.
-3. Push config files to your app/config/packages directory for customization with `php artisan config:publish bkwld/codebasehq`.  This is required for Laravel to respect different config settings per enviornment.
+1. Add it to your composer.json (`"SparkHire/codebasehq": "~3.0"`) and do a composer install.
+2. Add the service provider to your app.php config file providers: `'SparkHire\CodebaseHQ\ServiceProvider',`.
+3. Push config files to your app/config/packages directory for customization with `php artisan config:publish SparkHire/codebasehq`.  This is required for Laravel to respect different config settings per enviornment.
 
 ## Configuration
 
@@ -23,7 +23,7 @@ You will need to edit the published config file, supplying your API creds, for t
 
 ### Exception Logging
 
-This just works as long as you have supplied the api key.  404 errors are currently ignored.  All other exceptions will be posted to Codebase.  By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the published config file at app/config/packages/bkwld/codebasehq/local/config.php.
+This just works as long as you have supplied the api key.  404 errors are currently ignored.  All other exceptions will be posted to Codebase.  By default, your "local" enviornment will not post exceptions to Codebase.  This can be changed in the published config file at app/config/packages/SparkHire/codebasehq/local/config.php.
 
 ### Deploy notifications
 
@@ -45,13 +45,13 @@ This command is designed to be run as part of a deploy script and requires you u
 
 	# Get all the commits that aren't on staging/master but are local
 	git log staging/master..master | php artisan codebasehq:deploy-tickets
-	
+
 	# The same as before, but fetch first so the diff is up to date
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets
-	
+
 	# Specify which server enviornment you are deploying to
 	git fetch staging && git log staging/master..master | php artisan codebasehq:deploy-tickets --server=staging
-	
+
 	# Save the the log before you deploy, then tell CodebaseHQ about it after
 	git fetch staging && git log staging/master..master > /tmp/deployed-staging-commits.log
 	run-deploy-code
@@ -61,4 +61,4 @@ This command is designed to be run as part of a deploy script and requires you u
 Here is an examle of what will get appened to the ticket:
 
 ![Deployed message within a ticket](http://f.cl.ly/items/342g2T0a04103m031q0Q/PNG.png)
-	
+
