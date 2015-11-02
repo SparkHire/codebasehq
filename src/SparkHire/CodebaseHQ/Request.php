@@ -10,13 +10,14 @@
 
     /**
      * Inject dependencies
+     *
      * @param string $user API Username
      * @param string $key API Key
      * @param string $project API Project
      */
     public function __construct($user, $key, $project) {
-      $this->user = $user;
-      $this->key = $key;
+      $this->user    = $user;
+      $this->key     = $key;
       $this->project = $project;
     }
 
@@ -29,11 +30,11 @@
       $headers = array('Accept: application/xml', 'Content-type: application/xml');
 
       // Create basic-auth syntax
-      $auth = $this->user.':'.$this->key;
+      $auth = $this->user . ':' . $this->key;
 
       // Endpoint
       $path = trim($path, '/');
-      $url = 'http://api3.codebasehq.com/'.$this->project.'/'.$path;
+      $url = 'http://api3.codebasehq.com/' . $this->project . '/' . $path;
 
       // Make request
       $ch = curl_init();

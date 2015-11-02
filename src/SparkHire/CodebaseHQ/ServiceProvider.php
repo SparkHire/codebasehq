@@ -18,21 +18,22 @@
 
         // Settings
         $apiKey  = $app->make('config')->get('codebasehq::exceptions_key');
-        $options = array(
-          'apiEndPoint' => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
+        $options = [
+          'apiEndPoint'     => 'https://exceptions.codebasehq.com/notifier_api/v2/notices',
           'environmentName' => $app->environment(),
-          'timeout' => 10, // The default wasn't log enough in my tests
-        );
+          'timeout'         => 10 // The default wasn't log enough in my tests
+        ];
 
         // Instantiate airbrake
         $config = new Airbrake\Configuration($apiKey, $options);
-        return new Airbrake\Client($config);
 
+        return new Airbrake\Client($config);
       });
 
       // Build the Request object which talks to codebase
       $this->app->singleton('codebasehq.request', function($app) {
         $config = $app->make('config');
+
         return new Request(
           $config->get('codebasehq::api.username'),
           $config->get('codebasehq::api.key'),
@@ -54,7 +55,9 @@
 
           // Exceptions to ignore
           foreach($app->make('config')->get('codebasehq::ignored_exceptions') as $class) {
-            if (is_a($exception, $class)) return;
+            if (is_a($exception, $class)) {
+              return;
+            }
           }
 
           // Tell Codebase
